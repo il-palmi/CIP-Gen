@@ -5,9 +5,11 @@ try:
     from barcode.writer import ImageWriter
     from PyQt5 import uic, QtWidgets, QtCore, QtGui
     from PyQt5.QtGui import QIcon
+    from os.path import expanduser
     import sys
     import traceback
     import logging
+
 except Exception as ex:
     from datetime import datetime
     f = open("traceback.txt", "a")
@@ -87,7 +89,19 @@ class Ui(QtWidgets.QMainWindow):
             message = f"Non hai inserito dati nei campi\n\n{empty}\n vuoi procedere comunque?"
             if warning_dialog(message, dialog_type="yes_no") == QtWidgets.QMessageBox.No:
                 return
-        gen_pdf(pn, rev, qty, date, ref, dest, operator)
+        dir = str(QtWidgets.QFileDialog.getSaveFileName(self, "Salva file con nome",
+                                                        f"{expanduser('~')}\\Desktop",
+                                                        "PDF (*.pdf);;All Files (*)",
+                                                        ))
+        if dir == "(\'\', \'\')":
+            return
+        dir = dir.split(",")
+        dir = dir[0]
+        dir = dir.lstrip("(\'")
+        dir = dir.rstrip("'")
+        gen_pdf(pn, rev, qty, date, ref, dest, operator, dir)
+        message = f"Cartellino generato in {dir}"
+        QtWidgets.QMessageBox(QtWidgets.QMessageBox.Information, "CIP-Gen", message).exec_()
 
 
 def gen_barcode(pdf: FPDF, pn: str, rev: str, qty: str):
@@ -119,7 +133,7 @@ def scale_image_dim(img_path: str, scale_factor: int):
     return dim
 
 
-def gen_pdf(pn: str, rev: str, qty: str, date: str, ref: str, dest: str, oper: str):
+def gen_pdf(pn: str, rev: str, qty: str, date: str, ref: str, dest: str, oper: str, dir: str):
     pdf = FPDF('P', 'mm', [WIDTH, HEIGHT])
     pdf.add_page('horizontal')
     pdf.set_font('Arial', 'B', 16)
@@ -162,7 +176,7 @@ def gen_pdf(pn: str, rev: str, qty: str, date: str, ref: str, dest: str, oper: s
     gen_barcode(pdf, pn=pn, rev=rev, qty=qty)
 
     # print pdf
-    pdf.output('test.pdf', 'F')
+    pdf.output(dir, 'F')
 
 
 def warning_dialog(message: str, dialog_type: str):
