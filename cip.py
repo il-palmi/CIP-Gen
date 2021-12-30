@@ -1,11 +1,18 @@
-from fpdf import FPDF
-from PIL import Image
-from barcode import EAN13, EAN8, Code39
-from barcode.writer import ImageWriter
-from PyQt5 import uic, QtWidgets, QtCore, QtGui
-from PyQt5.QtGui import QIcon
-import sys
-import traceback
+try:
+    from fpdf import FPDF
+    from PIL import Image
+    from barcode import EAN13, EAN8, Code39
+    from barcode.writer import ImageWriter
+    from PyQt5 import uic, QtWidgets, QtCore, QtGui
+    from PyQt5.QtGui import QIcon
+    import sys
+    import traceback
+    import logging
+except Exception as ex:
+    from datetime import datetime
+    f = open("traceback.txt", "a")
+    f.write(f"[{datetime.now()}] --- {ex}\n")
+    f.close()
 
 WIDTH = 105 #mm
 HEIGHT = 148
@@ -197,7 +204,16 @@ def main():
     except BaseException:
         print(traceback.print_exc(file=sys.stdout))
 
+def save_traceback():
+    from datetime import datetime
+    f = open("traceback.txt", "a")
+    f.write(f"[{datetime.now()}] --- {ex}\n")
+    f.close()
 
 if __name__ == '__main__':
-    main()
-
+    try:
+        main()
+    except Exception as ex:
+        save_traceback()
+    except OSError as ex:
+        save_traceback()
