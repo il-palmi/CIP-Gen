@@ -1,3 +1,5 @@
 pyqt5
 python-barcode
 fpdf
+pillow
+xlsxwriter
