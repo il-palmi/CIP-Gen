@@ -304,6 +304,33 @@
         <height>341</height>
        </rect>
       </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <attribute name="horizontalHeaderHighlightSections">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Codice</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Quantità</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>N° buste</string>
+       </property>
+      </column>
      </widget>
      <widget class="QPushButton" name="clearTableBtn">
       <property name="geometry">
@@ -328,7 +355,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>Annulla</string>
+       <string>Annulla inserimento</string>
       </property>
      </widget>
      <widget class="QPushButton" name="exportBtn">
